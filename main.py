@@ -13,7 +13,7 @@ screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #load images
-enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
+enemy_image = [pg.image.load("assets/images/enemies/slime_enemy/slime_{}.png".format(i)).convert_alpha() for i in range(1, 5)]
 
 #create groups
 enemy_group = pg.sprite.Group()
