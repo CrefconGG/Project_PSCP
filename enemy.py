@@ -8,13 +8,16 @@ class Enemy(pg.sprite.Sprite):
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = pos
-        self.animation_speed = 5  # Speed of animation
 
     def update(self):
         self.animate()
+        self.move()
 
     def animate(self):
         self.index += 1
         if self.index >= len(self.images):
             self.index = 0
         self.image = self.images[self.index]
+    
+    def move(self):
+        self.rect.x += 0.5
