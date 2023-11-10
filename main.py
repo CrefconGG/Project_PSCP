@@ -30,8 +30,12 @@ with open('levels/level.tmj') as file:
 def create_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
     mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
-    turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
-    turret_group.add(turret)
+    #calculate the squential number of the tile
+    mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
+    #check if that tile is not path
+    if world.tile_map[mouse_tile_num] == 7:
+        turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
+        turret_group.add(turret)
 
 #create world
 world = World(world_data, map_image)
