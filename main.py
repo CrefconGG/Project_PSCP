@@ -20,20 +20,18 @@ map_image = pg.image.load('levels/level.png').convert_alpha()
 #enemies
 enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
 
+#load json data for level
+with open('levels/level.tmj') as file:
+    world_data = json.load(file)
+
 #create world
-world = World(map_image)
+world = World(world_data, map_image)
+world.process_data()
 
 #create groups
 enemy_group = pg.sprite.Group()
 
-waypoint = [
-    (100, 100),
-    (400, 200),
-    (400, 100),
-    (200, 300)
-]
-
-enemy = Enemy(waypoint, enemy_image)
+enemy = Enemy(world.waypoints, enemy_image)
 enemy_group.add(enemy)
 
 #new icon
@@ -53,9 +51,6 @@ while run:
 
     #draw map
     world.draw(screen)
-
-    #draw enemy path
-    pg.draw.lines(screen, "Black", False, waypoint)
 
     #draw groups
     enemy_group.draw(screen)
