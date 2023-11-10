@@ -2,6 +2,7 @@ import pygame as pg
 import json
 from enemy import Enemy
 from world import World
+from turret import Turret
 import constants as c
 
 #initialise pygame
@@ -17,6 +18,8 @@ pg.display.set_caption("การเอาคืนของป้อม DEMO")
 #load images
 #map
 map_image = pg.image.load('levels/level.png').convert_alpha()
+#individual turret image for mouse cursor
+cursor_turret = pg.image.load("assets/images/turrets/cursor_turret.png").convert_alpha()
 #enemies
 enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
 
@@ -30,6 +33,7 @@ world.process_data()
 
 #create groups
 enemy_group = pg.sprite.Group()
+turret_group = pg.sprite.Group()
 
 enemy = Enemy(world.waypoints, enemy_image)
 enemy_group.add(enemy)
@@ -54,12 +58,19 @@ while run:
 
     #draw groups
     enemy_group.draw(screen)
+    turret_group.draw(screen)
 
     #event control
     for event in pg.event.get():
         #exit game
         if event.type == pg.QUIT:
             run = False
+        #mouse click
+        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+            mouse_pos = pg.mouse.get_pos()
+            turret = Turret(cursor_turret, mouse_pos)
+            turret_group.add(turret)
+
     #update display
     pg.display.flip()
 
