@@ -13,19 +13,19 @@ screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #load images
-enemy_image = [pg.image.load("assets/images/enemies/enemy_{}.png".format(i)).convert_alpha() for i in range(1, 7)]
+enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
 
-waypoints = [
+waypoint = [
     (100, 100),
     (400, 200),
     (400, 100),
-    (200, 300),
+    (200, 300)
 ]
 
-enemy = Enemy(waypoints, enemy_image)
+enemy = Enemy(waypoint, enemy_image)
 enemy_group.add(enemy)
 
 #new icon
@@ -43,8 +43,8 @@ while run:
 
     screen.fill("white")
 
-    #draw enemies path
-    pg.draw.lines(screen, "black", False, waypoints)
+    #draw enemy path
+    pg.draw.lines(screen, "Black", False, waypoint)
 
     #draw groups
     enemy_group.draw(screen)
