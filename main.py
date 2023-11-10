@@ -1,5 +1,7 @@
 import pygame as pg
+import json
 from enemy import Enemy
+from world import World
 import constants as c
 
 #initialise pygame
@@ -13,7 +15,13 @@ screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #load images
+#map
+map_image = pg.image.load('levels/level.png').convert_alpha()
+#enemies
 enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
+
+#create world
+world = World(map_image)
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -42,6 +50,9 @@ while run:
     enemy_group.update()
 
     screen.fill("white")
+
+    #draw map
+    world.draw(screen)
 
     #draw enemy path
     pg.draw.lines(screen, "Black", False, waypoint)
