@@ -27,6 +27,12 @@ enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
 with open('levels/level.tmj') as file:
     world_data = json.load(file)
 
+def create_turret(mouse_pos):
+    mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
+    mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
+    turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
+    turret_group.add(turret)
+
 #create world
 world = World(world_data, map_image)
 world.process_data()
@@ -68,8 +74,9 @@ while run:
         #mouse click
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pg.mouse.get_pos()
-            turret = Turret(cursor_turret, mouse_pos)
-            turret_group.add(turret)
+            #check if mouse on the game area
+            if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
+                create_turret(mouse_pos)
 
     #update display
     pg.display.flip()
