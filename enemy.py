@@ -20,6 +20,7 @@ class Enemy(pg.sprite.Sprite):
     def update(self):
         self.move()
         self.rotate()
+        self.check_alive()
     
     def move(self):
         #define a target waypoint
@@ -49,3 +50,7 @@ class Enemy(pg.sprite.Sprite):
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
+
+    def check_alive(self):
+        if self.health <= 0:
+            self.kill()

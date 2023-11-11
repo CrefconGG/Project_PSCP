@@ -72,6 +72,9 @@ class Turret(pg.sprite.Sprite):
             if dist < self.range:
                 self.target = enemy
                 self.angle = math.degrees(math.atan2(-y_dist, x_dist))
+                #damage enemy
+                self.target.health -= c.DAMAGE
+                break
     
     def play_animation(self):
         #update image
