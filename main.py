@@ -116,7 +116,7 @@ while run:
     # UPDATE ZONE
 
     #update groups
-    enemy_group.update()
+    enemy_group.update(world)
     turret_group.update(enemy_group)
 
     #highlight selected turret
