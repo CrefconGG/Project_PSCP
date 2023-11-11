@@ -17,6 +17,7 @@ screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #game variables
+level_started = False
 last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
 selected_turret = None
@@ -43,13 +44,14 @@ enemy_images = {
 buy_turret_image = pg.image.load("assets/images/buttons/buy_tower.png").convert_alpha()
 cancel_image = pg.image.load("assets/images/buttons/cancel.png").convert_alpha()
 upgrade_terret_image = pg.image.load("assets/images/buttons/upgrade_tower.png").convert_alpha()
+begin_image = pg.image.load("assets/images/buttons/begin.png").convert_alpha()
 
 #load json data for level
 with open('levels/level.tmj') as file:
     world_data = json.load(file)
 
 #load fonts for displaying text on the screen
-text_font = pg.font.SysFont("Consolar", 24, bold = True)
+text_font = pg.font.SysFont("Consolar", 35, bold = True)
 large_font = pg.font.SysFont("Consolar", 36)
 
 #function for outputting text onto the screen
@@ -104,6 +106,7 @@ pg.display.set_icon(icon)
 turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, True)
 upgrade_button = Button(c.SCREEN_WIDTH + 5, 180, upgrade_terret_image, True)
+begin_button = Button(c.SCREEN_WIDTH + 60, 10, begin_image, True)
 
 #game loop
 run = True
@@ -134,16 +137,25 @@ while run:
         turret.draw(screen)
 
     draw_text(str(world.health), text_font, "white", 1, 5)
-    draw_text(str(world.money), text_font, "white", 1, 25)
+    draw_text(str(world.money), text_font, "white", 1, 30)
 
-    #spawn enemies
-    if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
-        if world.spawned_enemies < len(world.enemy_list):
-            enemy_type = world.enemy_list[world.spawned_enemies]
-            enemy = Enemy(enemy_type, world.waypoints, enemy_images)
-            enemy_group.add(enemy)
-            world.spawned_enemies += 1
-            last_enemy_spawn = pg.time.get_ticks()
+    #check if the level has been started or not
+    if level_started == False:
+        if begin_button.draw(screen):
+            level_started = True
+    else:
+        #spawn enemies
+        if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
+            if world.spawned_enemies < len(world.enemy_list):
+                enemy_type = world.enemy_list[world.spawned_enemies]
+                enemy = Enemy(enemy_type, world.waypoints, enemy_images)
+                enemy_group.add(enemy)
+                world.spawned_enemies += 1
+                last_enemy_spawn = pg.time.get_ticks()
+
+    #check if the wave is finished
+    if world.check_level_complete() == True:
+        level_started = False
 
     #draw buttons
     #button for placing tower
