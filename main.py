@@ -16,6 +16,9 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
+#game variables
+placing_turrets = False
+
 #load images
 #map
 map_image = pg.image.load('levels/level.png').convert_alpha()
@@ -65,7 +68,7 @@ pg.display.set_icon(icon)
 
 #create buttons
 turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
-cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, False)
+cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, True)
 
 #game loop
 run = True
@@ -92,9 +95,17 @@ while run:
     #draw buttons
     #button for placing tower
     if turret_button.draw(screen):
-        print("new_tower")
-    if cancel_button.draw(screen):
-        print("back")
+        placing_turrets = True
+    #if placing towers then show the back button
+    if placing_turrets == True:
+        #show cursor tower
+        cursor_rect = cursor_turret.get_rect()
+        cursor_pos = pg.mouse.get_pos()
+        cursor_rect.center = cursor_pos
+        if cursor_pos[0] <= c.SCREEN_WIDTH:
+            screen.blit(cursor_turret, cursor_rect)
+        if cancel_button.draw(screen):
+            placing_turrets = False
 
     #event control
     for event in pg.event.get():
@@ -106,7 +117,8 @@ while run:
             mouse_pos = pg.mouse.get_pos()
             #check if mouse on the game area
             if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
-                create_turret(mouse_pos)
+                if placing_turrets == True:
+                    create_turret(mouse_pos)
 
     #update display
     pg.display.flip()
