@@ -203,7 +203,17 @@ while run:
             draw_text("GAME OVER", large_font, "white", 310, 230)
         #restart level
         if restart_button.draw(screen):
-            pass
+            game_over = False
+            level_started = False
+            placing_turrets = False
+            selected_turret = None
+            last_enemy_spawn = pg.time.get_ticks()
+            world = World(world_data, map_image)
+            world.process_data()
+            world.process_enemies()
+            #enemy groups
+            enemy_group.empty()
+            turret_group.empty()
 
     #event control
     for event in pg.event.get():
