@@ -18,6 +18,7 @@ pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #game variables
 placing_turrets = False
+selected_turret = None
 
 #load images
 #map
@@ -52,6 +53,13 @@ def create_turret(mouse_pos):
         if space_is_free == True:
             new_turret = Turret(turret_sheet, mouse_tile_x, mouse_tile_y)
             turret_group.add(new_turret)
+    
+def select_turret(mouse_pos):
+    mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
+    mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
+    for turret in turret_group:
+            if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+                return turret  
 
 #create world
 world = World(world_data, map_image)
@@ -86,6 +94,10 @@ while run:
     enemy_group.update()
     turret_group.update()
 
+    #highlight selected turret
+    if selected_turret:
+        selected_turret.selected = True
+
     # DRAW ZONE
 
     #draw map
@@ -93,7 +105,8 @@ while run:
 
     #draw groups
     enemy_group.draw(screen)
-    turret_group.draw(screen)
+    for turret in turret_group:
+        turret.draw(screen)
 
     #draw buttons
     #button for placing tower
@@ -122,6 +135,8 @@ while run:
             if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
                 if placing_turrets == True:
                     create_turret(mouse_pos)
+                else:
+                    selected_turret = select_turret(mouse_pos)
 
     #update display
     pg.display.flip()
