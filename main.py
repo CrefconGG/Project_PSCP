@@ -84,6 +84,7 @@ while run:
 
     #update groups
     enemy_group.update()
+    turret_group.update()
 
     # DRAW ZONE
 
