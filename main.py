@@ -48,6 +48,7 @@ cancel_image = pg.image.load("assets/images/buttons/cancel.png").convert_alpha()
 upgrade_terret_image = pg.image.load("assets/images/buttons/upgrade_tower.png").convert_alpha()
 begin_image = pg.image.load("assets/images/buttons/begin.png").convert_alpha()
 restart_image = pg.image.load("assets/images/buttons/restart.png").convert_alpha()
+fast_forward_image = pg.image.load("assets/images/buttons/fast_forward.png").convert_alpha()
 
 #load json data for level
 with open('levels/level.tmj') as file:
@@ -61,6 +62,10 @@ large_font = pg.font.SysFont("Consolar", 36)
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
+
+def display_data():
+    #draw panel
+    pg.draw.rect(screen, "red", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
 
 def create_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
@@ -111,6 +116,7 @@ cancel_button = Button(c.SCREEN_WIDTH + 100, 180, cancel_image, True)
 upgrade_button = Button(c.SCREEN_WIDTH + 100, 250, upgrade_terret_image, True)
 begin_button = Button(c.SCREEN_WIDTH + 60, 10, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
+fast_forward_button = Button(c.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
 
 #game loop
 run = True
@@ -134,7 +140,7 @@ while run:
 
         #update groups
         enemy_group.update(world)
-        turret_group.update(enemy_group)
+        turret_group.update(enemy_group, world)
 
         #highlight selected turret
         if selected_turret:
@@ -150,6 +156,8 @@ while run:
     for turret in turret_group:
         turret.draw(screen)
 
+    display_data()
+
     draw_text(str(world.health), text_font, "white", 1, 5)
     draw_text(str(world.money), text_font, "white", 1, 30)
     draw_text(str(world.level), text_font, "white", 1, 60)
@@ -160,6 +168,10 @@ while run:
             if begin_button.draw(screen):
                 level_started = True
         else:
+            #fast forward option
+            world.game_speed = 1
+            if fast_forward_button.draw(screen):
+                world.game_speed = 2
             #spawn enemies
             if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
                 if world.spawned_enemies < len(world.enemy_list):
