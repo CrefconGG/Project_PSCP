@@ -127,6 +127,10 @@ while run:
         if world.health <= 0:
             game_over = True
             game_outcome = -1 #loss
+        #ckeck if player has won
+        if world.level > c.TOTAL_LEVELS:
+            game_over = True
+            game_outcome = 1 #win
 
         #update groups
         enemy_group.update(world)
@@ -200,7 +204,9 @@ while run:
     else:
         pg.draw.rect(screen, "red", (200, 200, 400, 200), border_radius = 30)
         if game_outcome == -1:
-            draw_text("GAME OVER", large_font, "white", 310, 230)
+            draw_text("GAME OVER", large_font, "white", 310, 250)
+        elif game_outcome == 1:
+            draw_text("VICTORY", large_font, "white", 320, 250)
         #restart level
         if restart_button.draw(screen):
             game_over = False
