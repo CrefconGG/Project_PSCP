@@ -15,15 +15,14 @@ class Button():
 
         #check mouseover and clicked conditions
         if self.rect.collidepoint(pos):
-            if pg.mouse.get_pressed()[0] == 1:
+            if pg.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 action = True
-                #if button is a single click type, then clicked to True
+                #if button is a single click type, then set clicked to True
                 if self.single_click:
                     self.clicked = True
 
         if pg.mouse.get_pressed()[0] == 0:
             self.clicked = False
-
 
         #draw button on screen
         surface.blit(self.image, self.rect)
