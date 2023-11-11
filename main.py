@@ -17,6 +17,7 @@ screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
 pg.display.set_caption("การเอาคืนของป้อม DEMO")
 
 #game variables
+last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
 selected_turret = None
 
@@ -78,14 +79,11 @@ def clear_selection():
 #create world
 world = World(world_data, map_image)
 world.process_data()
+world.process_enemies()
 
 #create groups
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
-
-enemy_type = "weak"
-enemy = Enemy(enemy_type, world.waypoints, enemy_images)
-enemy_group.add(enemy)
 
 #new icon
 icon = pg.image.load("assets/images/icons/icon.png")
@@ -123,6 +121,15 @@ while run:
     enemy_group.draw(screen)
     for turret in turret_group:
         turret.draw(screen)
+
+    #spawn enemies
+    if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
+        if world.spawned_enemies < len(world.enemy_list):
+            enemy_type = world.enemy_list[world.spawned_enemies]
+            enemy = Enemy(enemy_type, world.waypoints, enemy_images)
+            enemy_group.add(enemy)
+            world.spawned_enemies += 1
+            last_enemy_spawn = pg.time.get_ticks()
 
     #draw buttons
     #button for placing tower
