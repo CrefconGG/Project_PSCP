@@ -31,7 +31,13 @@ for x in range(1, c.TURRET_LEVELS + 1):
 #individual turret image for mouse cursor
 cursor_turret = pg.image.load("assets/images/turrets/cursor_turret.png").convert_alpha()
 #enemies
-enemy_image = pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha()
+enemy_images = {
+    "weak": pg.image.load("assets/images/enemies/enemy_1.png").convert_alpha(),
+    "midium": pg.image.load("assets/images/enemies/enemy_2.png").convert_alpha(),
+    "strong": pg.image.load("assets/images/enemies/enemy_3.png").convert_alpha(),
+    "elite": pg.image.load("assets/images/enemies/enemy_4.png").convert_alpha()
+}
+
 #buttons
 buy_turret_image = pg.image.load("assets/images/buttons/buy_tower.png").convert_alpha()
 cancel_image = pg.image.load("assets/images/buttons/cancel.png").convert_alpha()
@@ -77,7 +83,8 @@ world.process_data()
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
-enemy = Enemy(world.waypoints, enemy_image)
+enemy_type = "weak"
+enemy = Enemy(enemy_type, world.waypoints, enemy_images)
 enemy_group.add(enemy)
 
 #new icon
