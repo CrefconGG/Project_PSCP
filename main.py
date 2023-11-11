@@ -48,6 +48,15 @@ upgrade_terret_image = pg.image.load("assets/images/buttons/upgrade_tower.png").
 with open('levels/level.tmj') as file:
     world_data = json.load(file)
 
+#load fonts for displaying text on the screen
+text_font = pg.font.SysFont("Consolar", 24, bold = True)
+large_font = pg.font.SysFont("Consolar", 36)
+
+#function for outputting text onto the screen
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
+
 def create_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
     mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
@@ -121,6 +130,9 @@ while run:
     enemy_group.draw(screen)
     for turret in turret_group:
         turret.draw(screen)
+
+    draw_text(str(world.health), text_font, "white", 1, 5)
+    draw_text(str(world.money), text_font, "white", 1, 25)
 
     #spawn enemies
     if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
