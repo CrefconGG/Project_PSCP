@@ -14,7 +14,7 @@ clock = pg.time.Clock()
 
 #create game window
 screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
-pg.display.set_caption("การเอาคืนของป้อม")
+pg.display.set_caption("Tower defence of Revenge")
 
 #game variables
 game_over = False
@@ -62,8 +62,8 @@ with open('levels/level.tmj') as file:
   world_data = json.load(file)
 
 #load fonts for displaying text on the screen
-text_font = pg.font.SysFont("Consolas", 24, bold = True)
-large_font = pg.font.SysFont("Consolas", 36)
+text_font = pg.font.SysFont("Arial", 24, bold = True)
+large_font = pg.font.SysFont("Arial", 60, bold = True)
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y):
@@ -72,9 +72,9 @@ def draw_text(text, font, text_col, x, y):
 
 def display_data():
   #draw panel
-  pg.draw.rect(screen, "brown", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
-  pg.draw.rect(screen, "white", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 400), 2)
-  screen.blit(logo_image, (c.SCREEN_WIDTH, 400))
+  pg.draw.rect(screen, "black", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, c.SCREEN_HEIGHT))
+  pg.draw.rect(screen, "black", (c.SCREEN_WIDTH, 0, c.SIDE_PANEL, 420), 2)
+  screen.blit(logo_image, (c.SCREEN_WIDTH, 420))
   #display data
   draw_text("LEVEL: " + str(world.level), text_font, "white", c.SCREEN_WIDTH + 10, 10)
   screen.blit(heart_image, (c.SCREEN_WIDTH + 10, 35))
@@ -123,12 +123,12 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
-cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, True)
-upgrade_button = Button(c.SCREEN_WIDTH + 5, 180, upgrade_turret_image, True)
+turret_button = Button(c.SCREEN_WIDTH + 0, 120, buy_turret_image, True)
+cancel_button = Button(c.SCREEN_WIDTH + 50, 120, cancel_image, True)
+upgrade_button = Button(c.SCREEN_WIDTH + 0, 180, upgrade_turret_image, True)
 begin_button = Button(c.SCREEN_WIDTH + 60, 300, begin_image, True)
-restart_button = Button(310, 300, restart_image, True)
-fast_forward_button = Button(c.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
+restart_button = Button(325, 300, restart_image, True)
+fast_forward_button = Button(c.SCREEN_WIDTH + 120, 300, fast_forward_image, False)
 
 #game loop
 run = True
@@ -203,8 +203,8 @@ while run:
     #draw buttons
     #button for placing towers
     #for the "tower button" show cost of tower and draw the button
-    draw_text(str(c.BUY_COST), text_font, "white", c.SCREEN_WIDTH + 215, 135)
-    screen.blit(coin_image, (c.SCREEN_WIDTH + 260, 130))
+    draw_text(str(c.BUY_COST), text_font, "white", c.SCREEN_WIDTH + 60, 135)
+    screen.blit(coin_image, (c.SCREEN_WIDTH + 95, 132))
     if turret_button.draw(screen):
       placing_turrets = True
     #if placing towers then show the cancel button as well
@@ -222,18 +222,18 @@ while run:
       #if a tower can be upgraded then show the upgrade button
       if selected_turret.upgrade_level < c.TURRET_LEVELS:
         #show cost of upgrade and draw the button
-        draw_text(str(c.UPGRADE_COST), text_font, "white", c.SCREEN_WIDTH + 215, 195)
-        screen.blit(coin_image, (c.SCREEN_WIDTH + 260, 190))
+        draw_text(str(c.UPGRADE_COST), text_font, "white", c.SCREEN_WIDTH + 60, 195)
+        screen.blit(coin_image, (c.SCREEN_WIDTH + 95, 192))
         if upgrade_button.draw(screen):
           if world.money >= c.UPGRADE_COST:
             selected_turret.upgrade()
             world.money -= c.UPGRADE_COST
   else:
-    pg.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+    pg.draw.rect(screen, "black", (200, 200, 400, 200))
     if game_outcome == -1:
-      draw_text("GAME OVER", large_font, "white", 310, 230)
+      draw_text("LOSS", large_font, "white", 345, 230)
     elif game_outcome == 1:
-      draw_text("YOU WIN!", large_font, "white", 315, 230)
+      draw_text("VICTORY", large_font, "white", 300, 230)
     #restart level
     if restart_button.draw(screen):
       game_over = False
